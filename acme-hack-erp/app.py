@@ -19,13 +19,13 @@ JWT_SECRET = 'secreto_jwt_debil'
 # Ruta de la base de datos en /tmp (directorio con permisos de escritura)
 DATABASE_PATH = '/tmp/base_datos.db'
 
-# Flags del CTF
-FLAG_SQL_INJECTION = 'flag{sql_injection_master}'
-FLAG_IDOR = 'flag{idor_access_granted}'
-FLAG_LFI = 'flag{lfi_root_access}'
-FLAG_XSS = 'flag{stored_xss_triggered}'
-FLAG_SSTI = 'flag{ssti_template_escape}'
-FLAG_JWT = 'flag{jwt_pwned}'
+# Flags del CTF (prefijo HackCon + nombre de la vulnerabilidad)
+FLAG_SQL_INJECTION = 'flag{hackcon_sql_injection}'
+FLAG_IDOR = 'flag{hackcon_idor}'
+FLAG_LFI = 'flag{hackcon_lfi}'
+FLAG_XSS = 'flag{hackcon_xss}'
+FLAG_SSTI = 'flag{hackcon_command_injection}'
+FLAG_JWT = 'flag{hackcon_jwt}'
 
 def obtener_conexion():
     """Obtiene conexión a la base de datos SQLite"""

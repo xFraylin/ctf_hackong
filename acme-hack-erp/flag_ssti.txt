@@ -1,1 +1,1 @@
-flag{ssti_template_escape}
+flag{hackcon_command_injection}
