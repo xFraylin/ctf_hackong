@@ -1,0 +1,3 @@
+ACME Corporation - Política de Seguridad de la Información
+Este documento describe las políticas internas de seguridad,
+controles de acceso y manejo de información sensible.

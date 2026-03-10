@@ -1,0 +1,18 @@
+# ACME Hack ERP - Docker Compose
+# Laboratorio CTF de Ciberseguridad - HackConRD
+
+version: '3.8'
+
+services:
+  acme-hack-erp:
+    build: .
+    container_name: acme-hack-erp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/tmp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped

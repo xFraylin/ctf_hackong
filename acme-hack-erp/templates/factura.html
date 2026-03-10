@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Hack ERP - Visor de Facturas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+        }
+        
+        .contenedor {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Menú Lateral */
+        .menu-lateral {
+            width: 260px;
+            background: #16213e;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-menu {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo-menu h2 {
+            color: #e94560;
+            font-size: 20px;
+        }
+        
+        .logo-menu p {
+            color: #4ecca3;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+            transform: translateX(5px);
+        }
+        
+        .menu-item.activo {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Contenido Principal */
+        .contenido-principal {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+        }
+        
+        .btn-logout {
+            padding: 10px 20px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Navegacion de facturas */
+        .nav-facturas {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-facturas a {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-facturas a:hover {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #e94560;
+            color: #e94560;
+        }
+        
+        .nav-facturas a.activo {
+            background: #e94560;
+            border-color: #e94560;
+            color: #fff;
+        }
+        
+        /* Factura */
+        .factura-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 40px;
+            color: #333;
+            max-width: 800px;
+        }
+        
+        .factura-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .factura-logo h2 {
+            color: #e94560;
+            font-size: 28px;
+        }
+        
+        .factura-logo p {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .factura-numero {
+            text-align: right;
+        }
+        
+        .factura-numero h3 {
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .factura-numero .numero {
+            font-size: 32px;
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        .factura-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .info-grupo h4 {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .info-grupo p {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .factura-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .factura-tabla th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .factura-tabla td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .factura-total {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .total-box {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-radius: 10px;
+            text-align: right;
+        }
+        
+        .total-box .label {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .total-box .monto {
+            font-size: 32px;
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        /* Flag Alert */
+        .flag-alert {
+            background: linear-gradient(135deg, #4ecca3 0%, #0f3460 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #4ecca3;
+        }
+        
+        .flag-alert h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .flag-alert code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: block;
+            color: #4ecca3;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .no-factura {
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid #e94560;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .no-factura h3 {
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+        
+        .no-factura p {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Menú Lateral -->
+        <nav class="menu-lateral">
+            <div class="logo-menu">
+                <h2>🏢 ACME Hack ERP</h2>
+                <p>Edición HackConRD</p>
+            </div>
+            
+            <a href="/panel" class="menu-item">
+                <span>📊</span> Panel Principal
+            </a>
+            <a href="/factura?id=1" class="menu-item activo">
+                <span>📄</span> Facturas
+            </a>
+            <a href="/ticket" class="menu-item">
+                <span>🎫</span> Tickets
+            </a>
+            <a href="/perfil" class="menu-item">
+                <span>👤</span> Mi Perfil
+            </a>
+            <a href="/descargar" class="menu-item">
+                <span>📁</span> Descargas
+            </a>
+            <a href="/logout" class="menu-item">
+                <span>🚪</span> Cerrar Sesión
+            </a>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="contenido-principal">
+            <header class="header">
+                <h1>📄 Visor de Facturas</h1>
+                <a href="/logout" class="btn-logout">Salir</a>
+            </header>
+            
+            <!-- Navegacion de facturas -->
+            <div class="nav-facturas">
+                <a href="/factura?id=1">Factura #1</a>
+                <a href="/factura?id=2">Factura #2</a>
+                <a href="/factura?id=3">Factura #3</a>
+                <a href="/factura?id=4">Factura #4</a>
+                <a href="/factura?id=5">Factura #5</a>
+            </div>
+            
+            {% if factura %}
+            <!-- Factura -->
+            <div class="factura-card">
+                <div class="factura-header">
+                    <div class="factura-logo">
+                        <h2>🏢 ACME Corp</h2>
+                        <p>Sistema ERP - HackConRD</p>
+                    </div>
+                    <div class="factura-numero">
+                        <h3>Factura</h3>
+                        <div class="numero">#{{ factura.id }}</div>
+                    </div>
+                </div>
+                
+                <div class="factura-info">
+                    <div class="info-grupo">
+                        <h4>Facturado a</h4>
+                        <p><strong>{{ factura.cliente }}</strong></p>
+                        <p>Calle Principal #123</p>
+                        <p>Ciudad, País 10001</p>
+                    </div>
+                    <div class="info-grupo">
+                        <h4>Información de pago</h4>
+                        <p><strong>ACME Corporation</strong></p>
+                        <p>Cuenta: ****4567</p>
+                        <p>Fecha: {{ factura.fecha if factura.fecha else 'Hoy' }}</p>
+                    </div>
+                </div>
+                
+                <table class="factura-tabla">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ factura.descripcion }}</td>
+                            <td>1</td>
+                            <td>${{ "%.2f"|format(factura.monto) }}</td>
+                            <td><strong>${{ "%.2f"|format(factura.monto) }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="factura-total">
+                    <div class="total-box">
+                        <div class="label">Total a Pagar</div>
+                        <div class="monto">${{ "%.2f"|format(factura.monto) }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if factura.flag %}
+            <!-- Flag IDOR encontrada -->
+            <div class="flag-alert">
+                <h3>🏆 ¡Flag Capturada! - IDOR</h3>
+                <p>Has accedido a una factura que no te pertenece.</p>
+                <code>{{ factura.flag }}</code>
+            </div>
+            {% endif %}
+            
+            {% else %}
+            <!-- No se encontró factura -->
+            <div class="no-factura">
+                <h3>❌ Factura no encontrada</h3>
+                <p>La factura solicitada no existe en el sistema.</p>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>

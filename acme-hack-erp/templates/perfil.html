@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Hack ERP - Herramienta de Diagnóstico de Red</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+        }
+        
+        .contenedor {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Menú Lateral */
+        .menu-lateral {
+            width: 260px;
+            background: #16213e;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-menu {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo-menu h2 {
+            color: #e94560;
+            font-size: 20px;
+        }
+        
+        .logo-menu p {
+            color: #4ecca3;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+            transform: translateX(5px);
+        }
+        
+        .menu-item.activo {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Contenido Principal */
+        .contenido-principal {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+        }
+        
+        .btn-logout {
+            padding: 10px 20px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Perfil Card */
+        .perfil-card {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .perfil-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #e94560, #0f3460);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 30px;
+        }
+        
+        .perfil-info {
+            text-align: center;
+        }
+        
+        .perfil-info h2 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .perfil-info .rol {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(78, 204, 163, 0.2);
+            color: #4ecca3;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .perfil-detalles {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detalle-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .detalle-item .label {
+            color: #888;
+        }
+        
+        .detalle-item .valor {
+            color: #fff;
+        }
+        
+        /* Resultado SSTI */
+        .resultado-ssti {
+            background: rgba(78, 204, 163, 0.1);
+            border: 1px solid #4ecca3;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .resultado-ssti h4 {
+            color: #4ecca3;
+            margin-bottom: 10px;
+        }
+        
+        .resultado-ssti .output {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #fff;
+        }
+        
+        /* Alerta de vulnerabilidad */
+        .alerta-vuln {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .alerta-vuln h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+        
+        .alerta-vuln p {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .alerta-vuln code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #4ecca3;
+        }
+        
+        .alerta-vuln .ejemplo {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #ccc;
+        }
+        
+        /* Input de prueba SSTI */
+        .test-ssti {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-ssti h3 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        
+        .test-form {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .test-form input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .test-form input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        
+        .test-form button {
+            padding: 15px 30px;
+            background: #e94560;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .test-form button:hover {
+            background: #d63850;
+        }
+        
+        /* Flag Alert */
+        .flag-alert {
+            background: linear-gradient(135deg, #4ecca3 0%, #0f3460 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 2px solid #4ecca3;
+        }
+        
+        .flag-alert h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .flag-alert code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: block;
+            color: #4ecca3;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Menú Lateral -->
+        <nav class="menu-lateral">
+            <div class="logo-menu">
+                <h2>🏢 ACME Hack ERP</h2>
+                <p>Edición HackConRD</p>
+            </div>
+            
+            <a href="/panel" class="menu-item">
+                <span>📊</span> Panel Principal
+            </a>
+            <a href="/factura?id=1" class="menu-item">
+                <span>📄</span> Facturas
+            </a>
+            <a href="/ticket" class="menu-item">
+                <span>🎫</span> Tickets
+            </a>
+            <a href="/perfil" class="menu-item activo">
+                <span>📡</span> Herramienta de Red
+            </a>
+            <a href="/descargar" class="menu-item">
+                <span>📁</span> Descargas
+            </a>
+            <a href="/logout" class="menu-item">
+                <span>🚪</span> Cerrar Sesión
+            </a>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="contenido-principal">
+            <header class="header">
+                <h1>🛠 Herramienta de Diagnóstico de Red</h1>
+                <a href="/logout" class="btn-logout">Salir</a>
+            </header>
+            
+            
+            <!-- Herramienta de Ping -->
+            <div class="test-ssti">
+                <h3>🔍 Herramienta de Ping</h3>
+                <form class="test-form" action="/perfil" method="GET">
+                    <input type="text" name="host" placeholder="IP o dominio (por ejemplo, 8.8.8.8)" value="{{ host or '' }}">
+                    <button type="submit">Ejecutar Ping</button>
+                </form>
+            </div>
+
+            {% if resultado is not none %}
+            <div class="resultado-ssti">
+                <h4>Resultado</h4>
+                <div class="output"><pre>{{ resultado }}</pre></div>
+            </div>
+            {% endif %}
+            
+        </main>
+    </div>
+</body>
+</html>

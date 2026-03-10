@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Hack ERP - Iniciar Sesión</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #e94560;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .logo p {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .logo .subtitulo {
+            color: #4ecca3;
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.3);
+        }
+        
+        .form-group input::placeholder {
+            color: #666;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #e94560, #0f3460);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+        
+        .error-message {
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: #4ecca3;
+            text-decoration: none;
+        }
+        
+        .credenciales-hint {
+            background: rgba(78, 204, 163, 0.1);
+            border: 1px solid rgba(78, 204, 163, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #4ecca3;
+        }
+        
+        .credenciales-hint strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🏢 ACME Hack ERP</h1>
+            <p class="subtitulo">Edición HackConRD</p>
+            <p>Sistema de Gestión Empresarial</p>
+        </div>
+        
+        {% if mensaje_error %}
+        <div class="error-message">
+            {{ mensaje_error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Ingrese su usuario" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+            </div>
+            
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
+        
+        <div class="credenciales-hint">
+            <strong>💡 Pista para el CTF:</strong>
+            ¿Has probado con inyecciones SQL?<br>
+            Usuario de prueba: empleado / empleado123
+        </div>
+        
+        <div class="footer">
+            <p>Laboratorio CTF - Solo para fines educativos</p>
+            <p>🔒 <a href="#">Política de Seguridad</a></p>
+        </div>
+    </div>
+</body>
+</html>

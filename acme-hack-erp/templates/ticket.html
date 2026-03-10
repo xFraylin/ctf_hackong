@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Hack ERP - Sistema de Tickets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+        }
+        
+        .contenedor {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Menú Lateral */
+        .menu-lateral {
+            width: 260px;
+            background: #16213e;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo-menu {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .logo-menu h2 {
+            color: #e94560;
+            font-size: 20px;
+        }
+        
+        .logo-menu p {
+            color: #4ecca3;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+            transform: translateX(5px);
+        }
+        
+        .menu-item.activo {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Contenido Principal */
+        .contenido-principal {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+        }
+        
+        .btn-logout {
+            padding: 10px 20px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        /* Formulario de Ticket */
+        .form-ticket {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-ticket h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.3);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn-submit {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #e94560, #0f3460);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+        
+        /* Mensaje de éxito */
+        .mensaje-exito {
+            background: rgba(78, 204, 163, 0.2);
+            border: 1px solid #4ecca3;
+            color: #4ecca3;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        /* Lista de Tickets */
+        .lista-tickets {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .lista-tickets h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .ticket-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e94560;
+        }
+        
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .ticket-asunto {
+            color: #e94560;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .ticket-fecha {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .ticket-mensaje {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        /* Alerta de vulnerabilidad */
+        .alerta-vuln {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .alerta-vuln h4 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+        
+        .alerta-vuln p {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .alerta-vuln code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #4ecca3;
+        }
+        
+        .btn-ver-ticket {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-ver-ticket:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        
+        .ticket-acciones {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Menú Lateral -->
+        <nav class="menu-lateral">
+            <div class="logo-menu">
+                <h2>🏢 ACME Hack ERP</h2>
+                <p>Edición HackConRD</p>
+            </div>
+            
+            <a href="/panel" class="menu-item">
+                <span>📊</span> Panel Principal
+            </a>
+            <a href="/factura?id=1" class="menu-item">
+                <span>📄</span> Facturas
+            </a>
+            <a href="/ticket" class="menu-item activo">
+                <span>🎫</span> Tickets
+            </a>
+            <a href="/perfil" class="menu-item">
+                <span>👤</span> Mi Perfil
+            </a>
+            <a href="/descargar?archivo=manual.pdf" class="menu-item">
+                <span>📁</span> Descargas
+            </a>
+            <a href="/logout" class="menu-item">
+                <span>🚪</span> Cerrar Sesión
+            </a>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="contenido-principal">
+            <header class="header">
+                <h1>🎫 Sistema de Tickets</h1>
+                <a href="/logout" class="btn-logout">Salir</a>
+            </header>
+            
+            {% if mensaje_exito %}
+            <div class="mensaje-exito">
+                ✅ {{ mensaje_exito }}
+            </div>
+            {% endif %}
+            
+            <!-- Formulario de nuevo ticket -->
+            <div class="form-ticket">
+                <h2>📝 Crear Nuevo Ticket</h2>
+                <form method="POST" action="/ticket">
+                    <div class="form-group">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" placeholder="Describe brevemente el problema" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" placeholder="Describe el problema en detalle..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">Enviar Ticket</button>
+                </form>
+            </div>
+            
+            <!-- Lista de tickets -->
+            <div class="lista-tickets">
+                <h2>📋 Tickets Existentes</h2>
+                <p style="color: #888; margin-bottom: 20px; font-size: 14px;">
+                    {% if rol == 'admin' %}
+                    Como administrador, puedes ver el contenido completo de cada ticket.
+                    {% else %}
+                    Los mensajes completos solo son visibles para administradores.
+                    {% endif %}
+                </p>
+                
+                {% if tickets %}
+                    {% for ticket in tickets %}
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <span class="ticket-asunto">{{ ticket.asunto }}</span>
+                            <span class="ticket-fecha">{{ ticket.fecha }}</span>
+                        </div>
+                        <div class="ticket-acciones" style="margin-top: 10px;">
+                            {% if rol == 'admin' %}
+                            <a href="/ticket/{{ ticket.id }}" class="btn-ver-ticket">Ver Mensaje Completo</a>
+                            {% else %}
+                            <span style="color: #666; font-size: 13px;">Esperando revision del administrador...</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #666; text-align: center; padding: 40px;">No hay tickets disponibles</p>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

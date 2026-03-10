@@ -1,0 +1,3 @@
+ACME Corporation - Manual de Usuario
+Guía básica de uso del sistema ERP ACME.
+Incluye procedimientos generales para usuarios finales.
