@@ -19,7 +19,7 @@ COPY . .
 RUN mkdir -p uploads templates /tmp && chmod -R 777 /tmp
 
 # Crear archivo de flag para LFI
-RUN echo "flag{lfi_root_access}" > /app/flag_lfi.txt && chmod 644 /app/flag_lfi.txt
+RUN echo "flag{hackcon_lfi}" > /app/flag_lfi.txt && chmod 644 /app/flag_lfi.txt
 
 # Crear documentos corporativos de ejemplo en uploads
 RUN echo "ACME Corporation - Manual de Usuario\nGuía básica de uso del sistema ERP ACME.\nIncluye procedimientos generales para usuarios finales." > /app/uploads/manual_usuario.txt && \
@@ -29,7 +29,7 @@ RUN echo "ACME Corporation - Manual de Usuario\nGuía básica de uso del sistema
     echo "ACME Corporation - Reporte Financiero Trimestral\nResumen ejecutivo de ingresos, gastos y proyecciones." > /app/uploads/reporte_financiero.txt
 
 # Crear archivo de flag para command injection
-RUN echo "flag{ssti_template_escape}" > /app/flag_ssti.txt && chmod 644 /app/flag_ssti.txt
+RUN echo "flag{hackcon_command_injection}" > /app/flag_ssti.txt && chmod 644 /app/flag_ssti.txt
 
 # Exponer puerto
 EXPOSE 5000

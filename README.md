@@ -56,7 +56,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
    - Usuario: `' OR 1=1--`  
    - Contraseña: lo que sea.
 4. Si el `SELECT` devuelve un usuario gracias a la inyección (y no por credenciales válidas), la app marcará la flag de SQLi y al entrar al panel `/panel` verás la tarjeta:
-   - `🏆 ¡Flag Capturada! - SQL Injection` con `flag{sql_injection_master}`.
+   - `🏆 ¡Flag Capturada! - SQL Injection` con `flag{hackcon_sql_injection}`.
 
 ---
 
@@ -74,7 +74,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
 3. Probar un ID “raro” más alto; en este lab la factura especial se inserta con un ID grande (por ejemplo `101`):
    - Ir a `http://localhost:5000/factura?id=101`.
 4. Si existe y no es del usuario, verás una tarjeta de flag en la parte inferior de la página de factura con:
-   - `🏆 ¡Flag Capturada! - IDOR` y `flag{idor_access_granted}`.
+   - `🏆 ¡Flag Capturada! - IDOR` y `flag{hackcon_idor}`.
 
 ---
 
@@ -92,7 +92,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
 2. Probar rutas con `../` para salir de la carpeta `uploads`. Ejemplos típicos:
    - `/descargar?archivo=../flag_lfi.txt`
    - o, según dónde se haya montado el volumen, variantes con más `../`.
-3. Cuando aciertes el path correcto, el contenido del archivo se mostrará en `<pre>`, incluyendo la flag `flag{lfi_root_access}`.
+3. Cuando aciertes el path correcto, el contenido del archivo se mostrará en `<pre>`, incluyendo la flag `flag{hackcon_lfi}`.
 
 > Nota: el path exacto puede cambiar según cómo montes el contenedor; juega con `../` hasta alcanzar la raíz del proyecto dentro del contenedor.
 
@@ -117,7 +117,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
    ```
 
 4. Al ver el detalle del ticket (`/ticket/<id>`), el navegador ejecutará el script. El HTML y el JS del lab también pueden simular un “bot admin” y mostrar/registrar la flag cuando detectan `<script>` en el contenido.
-5. La flag asociada es `flag{stored_xss_triggered}`.
+5. La flag asociada es `flag{hackcon_xss}`.
 
 > Para un CTF real, puedes cambiar el payload recomendado y la forma de reportar la cookie/flag (por ejemplo, haciendo `fetch` hacia un endpoint tipo `/api/reportar-xss`).
 
@@ -151,7 +151,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
 - **Código relevante**:
   - `JWT_SECRET = 'secreto_jwt_debil'`
   - Función `verificar_jwt()` en `app.py` acepta `alg=none`.
-  - En `panel()` se comprueba si el JWT dice que eres `admin` aunque la sesión no lo sea, y entonces muestra `flag{jwt_pwned}`.
+- En `panel()` se comprueba si el JWT dice que eres `admin` aunque la sesión no lo sea, y entonces muestra `flag{hackcon_jwt}`.
 - **Objetivo**: modificar/forjar el JWT para cambiar tu rol a `admin` y disparar la flag `flag{hackcon_jwt}`.
 
 **Cómo explotarla (idea básica)**
@@ -169,7 +169,7 @@ Credenciales de ejemplo (usuarios “legítimos”):
    ```
 
 4. Monta el token con `alg: "none"` y **sin firma**, y reemplaza la cookie `token_jwt` del navegador por esta versión.
-5. Refresca `/panel`; si el backend acepta el JWT sin firma y ve `rol: admin` en el payload mientras tu sesión normal no es admin, mostrará la tarjeta de flag de JWT inseguro con `flag{jwt_pwned}`.
+5. Refresca `/panel`; si el backend acepta el JWT sin firma y ve `rol: admin` en el payload mientras tu sesión normal no es admin, mostrará la tarjeta de flag de JWT inseguro con `flag{hackcon_jwt}`.
 
 > Alternativamente, también podrías firmar un JWT HS256 usando el secreto débil conocido (`secreto_jwt_debil`), lo que ilustra un ataque por fuerza bruta de secretos poco robustos.
 
