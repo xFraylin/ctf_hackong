@@ -297,6 +297,67 @@
             font-size: 16px;
             margin-top: 10px;
         }
+
+        /* Submenu en Perfil */
+        .sub-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sub-menu a {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .sub-menu a:hover {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .sub-menu a.activo {
+            background: #e94560;
+            border-color: #e94560;
+            color: #fff;
+        }
+
+        /* Tabla simple */
+        .tabla {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla th, .tabla td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #ccc;
+        }
+
+        .tabla th {
+            color: #888;
+            font-weight: normal;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .link {
+            color: #4ecca3;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -311,14 +372,11 @@
             <a href="/panel" class="menu-item">
                 <span>📊</span> Panel Principal
             </a>
-            <a href="/factura?id=1" class="menu-item">
-                <span>📄</span> Facturas
-            </a>
             <a href="/ticket" class="menu-item">
                 <span>🎫</span> Tickets
             </a>
             <a href="/perfil" class="menu-item activo">
-                <span>📡</span> Herramienta de Red
+                <span>👤</span> Mi Perfil
             </a>
             <a href="/descargar" class="menu-item">
                 <span>📁</span> Descargas
@@ -331,15 +389,51 @@
         <!-- Contenido Principal -->
         <main class="contenido-principal">
             <header class="header">
-                <h1>🛠 Herramienta de Diagnóstico de Red</h1>
+                <h1>👤 Mi Perfil</h1>
                 <a href="/logout" class="btn-logout">Salir</a>
             </header>
-            
-            
-            <!-- Herramienta de Ping -->
+
+            <div class="sub-menu">
+                <a href="/perfil?seccion=resumen" class="{% if seccion == 'resumen' %}activo{% endif %}">Resumen</a>
+                <a href="/perfil?seccion=facturas" class="{% if seccion == 'facturas' %}activo{% endif %}">Mis facturas</a>
+                <a href="/perfil?seccion=ping" class="{% if seccion == 'ping' %}activo{% endif %}">Validar ping</a>
+            </div>
+
+            {% if seccion == 'facturas' %}
             <div class="test-ssti">
-                <h3>🔍 Herramienta de Ping</h3>
+                <h3>📄 Mis facturas</h3>
+
+                {% if facturas and facturas|length > 0 %}
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Monto</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in facturas %}
+                        <tr>
+                            <td>#{{ f.id }}</td>
+                            <td>{{ f.cliente }}</td>
+                            <td>${{ "%.2f"|format(f.monto) }}</td>
+                            <td><a class="link" href="/factura?id={{ f.id }}">Ver</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="color:#888;">No hay facturas para tu usuario.</p>
+                {% endif %}
+            </div>
+
+            {% elif seccion == 'ping' %}
+            <div class="test-ssti">
+                <h3>🔍 Validar ping</h3>
                 <form class="test-form" action="/perfil" method="GET">
+                    <input type="hidden" name="seccion" value="ping">
                     <input type="text" name="host" placeholder="IP o dominio (por ejemplo, 8.8.8.8)" value="{{ host or '' }}">
                     <button type="submit">Ejecutar Ping</button>
                 </form>
@@ -349,6 +443,33 @@
             <div class="resultado-ssti">
                 <h4>Resultado</h4>
                 <div class="output"><pre>{{ resultado }}</pre></div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="perfil-card">
+                <div class="perfil-avatar">👤</div>
+                <div class="perfil-info">
+                    <h2>{{ usuario }}</h2>
+                    <span class="rol">{{ rol }}</span>
+                </div>
+                <div class="perfil-detalles">
+                    <div class="detalle-item">
+                        <span class="label">Usuario</span>
+                        <span class="valor">{{ usuario }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Rol</span>
+                        <span class="valor">{{ rol }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Accesos</span>
+                        <span class="valor">
+                            <a class="link" href="/perfil?seccion=facturas">Mis facturas</a> ·
+                            <a class="link" href="/perfil?seccion=ping">Validar ping</a>
+                        </span>
+                    </div>
+                </div>
             </div>
             {% endif %}
             

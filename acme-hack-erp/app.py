@@ -310,21 +310,66 @@ def perfil():
     if 'usuario' not in session:
         return redirect(url_for('login'))
 
+    seccion = request.args.get('seccion', 'resumen').strip().lower()
     host = request.args.get('host', '').strip()
     resultado = None
+    facturas = []
 
     if host:
-        # Bloqueo básico de comandos específicos
-        if "cat" in host.lower():
+        # Blacklist de comandos/operadores peligrosos (manteniendo la lógica vulnerable)
+        host_lower = host.lower()
+        tokens_prohibidos = [
+            "cat",
+            "less",
+            "more",
+            "tac",
+            "nl",
+            "awk",
+            "sed",
+            "cut",
+            "strings",
+            "&",
+            "|",
+            "||",
+            "&&",
+            "`",
+            "$(",
+            "$",
+            ">",
+            ">>",
+            "<",
+        ]
+
+        if any(token in host_lower for token in tokens_prohibidos):
             resultado = "Comando no permitido"
         else:
             comando = f"ping -c 1 {host}"
             resultado = os.popen(comando).read()
 
+    # Listado de facturas (para no exponer "todas" a empleado)
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        if session.get('rol') == 'admin':
+            cursor.execute("SELECT id, usuario_id, cliente, monto, descripcion FROM facturas ORDER BY id ASC")
+        else:
+            cursor.execute(
+                "SELECT id, usuario_id, cliente, monto, descripcion FROM facturas WHERE usuario_id = ? ORDER BY id ASC",
+                (session.get('usuario_id'),),
+            )
+        facturas = cursor.fetchall() or []
+    finally:
+        try:
+            conexion.close()
+        except Exception:
+            pass
+
     return render_template(
         'perfil.html',
         usuario=session.get('usuario'),
         rol=session.get('rol'),
+        seccion=seccion,
+        facturas=facturas,
         host=host,
         resultado=resultado,
     )

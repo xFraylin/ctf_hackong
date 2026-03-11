@@ -297,9 +297,6 @@
             <a href="/panel" class="menu-item">
                 <span>📊</span> Panel Principal
             </a>
-            <a href="/factura?id=1" class="menu-item activo">
-                <span>📄</span> Facturas
-            </a>
             <a href="/ticket" class="menu-item">
                 <span>🎫</span> Tickets
             </a>
@@ -320,14 +317,8 @@
                 <h1>📄 Visor de Facturas</h1>
                 <a href="/logout" class="btn-logout">Salir</a>
             </header>
-            
-            <!-- Navegacion de facturas -->
             <div class="nav-facturas">
-                <a href="/factura?id=1">Factura #1</a>
-                <a href="/factura?id=2">Factura #2</a>
-                <a href="/factura?id=3">Factura #3</a>
-                <a href="/factura?id=4">Factura #4</a>
-                <a href="/factura?id=5">Factura #5</a>
+                <a href="/perfil?seccion=facturas">← Volver a Mis facturas</a>
             </div>
             
             {% if factura %}
