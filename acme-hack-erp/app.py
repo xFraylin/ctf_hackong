@@ -79,12 +79,14 @@ def inicializar_base_datos():
         cursor.execute("INSERT INTO usuarios (usuario, password, rol, flag) VALUES ('admin', 'admin123', 'admin', ?)", (FLAG_JWT,))
         cursor.execute("INSERT INTO usuarios (usuario, password, rol) VALUES ('empleado', 'empleado123', 'empleado')")
         
-        # Insertar facturas normales (visibles en el dashboard)
+        # Insertar facturas normales:
+        # - 1 factura asociada al usuario empleado (id=2)
+        # - 4 facturas asociadas al admin (id=1) para explotar IDOR desde el empleado
         cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (2, 'Cliente ABC', 1500.00, 'Servicios de consultoria')")
-        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (2, 'Cliente XYZ', 2300.50, 'Desarrollo de software')")
-        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (2, 'Empresa Delta', 4200.00, 'Mantenimiento anual')")
-        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (2, 'Corp Solutions', 1850.75, 'Licencias de software')")
-        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (2, 'Tech Partners', 3100.00, 'Integracion de sistemas')")
+        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (1, 'Cliente XYZ', 2300.50, 'Desarrollo de software')")
+        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (1, 'Empresa Delta', 4200.00, 'Mantenimiento anual')")
+        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (1, 'Corp Solutions', 1850.75, 'Licencias de software')")
+        cursor.execute("INSERT INTO facturas (usuario_id, cliente, monto, descripcion) VALUES (1, 'Tech Partners', 3100.00, 'Integracion de sistemas')")
         
         # Factura secreta con ID alto (101) - solo accesible via IDOR
         cursor.execute("INSERT INTO facturas (id, usuario_id, cliente, monto, descripcion, flag) VALUES (101, 1, 'Cliente Interno', 999999.99, 'Factura confidencial - Auditoria interna', ?)", (FLAG_IDOR,))
