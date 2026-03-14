@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>IntraCorp Document Repository</h1>
+    <p style="margin-bottom:16px; color:#9ca3af;">
+        Central repository for internal documents and corporate records.
+    </p>
+
+    <ul style="list-style:none; padding-left:0; font-size:14px; color:#e5e7eb;">
+        {% for doc in documentos %}
+        <li style="margin-bottom:8px;">
+            <a href="/api/document?doc_id={{ doc.doc_id }}"
+               style="color:#38bdf8; text-decoration:none;">
+                {{ doc.nombre }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

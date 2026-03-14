@@ -4,11 +4,12 @@
 version: '3.8'
 
 services:
-  acme-hack-erp:
+  portal:
     build: .
-    container_name: acme-hack-erp
+    container_name: intracorp-portal
+    command: ["python", "portal/app.py"]
     ports:
-      - "5000:5000"
+      - "8091:5000"
     volumes:
       - ./data:/tmp
       - ./uploads:/app/uploads
@@ -16,3 +17,60 @@ services:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
     restart: unless-stopped
+
+  api:
+    build: .
+    container_name: intracorp-api
+    command: ["python", "api/app.py"]
+    ports:
+      - "8092:5000"
+    volumes:
+      - ./data:/tmp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+
+  tools:
+    build: .
+    container_name: intracorp-tools
+    command: ["python", "tools/app.py"]
+    ports:
+      - "8093:5000"
+    volumes:
+      - ./data:/tmp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+
+  billing:
+    build: .
+    container_name: intracorp-billing
+    command: ["python", "billing/app.py"]
+    ports:
+      - "8094:5000"
+    volumes:
+      - ./data:/tmp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+
+  invite:
+    build: .
+    container_name: intracorp-invite
+    command: ["python", "invite/app.py"]
+    ports:
+      - "8095:5000"
+    volumes:
+      - ./data:/tmp
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    restart: unless-stopped
+

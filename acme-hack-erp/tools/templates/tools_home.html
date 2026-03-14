@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>IntraCorp Network Diagnostics</h1>
+    <p style="margin-bottom:16px; color:#9ca3af;">
+        Internal tools for basic connectivity and network troubleshooting.
+    </p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:8px;">
+        <section style="border-radius:10px; border:1px solid rgba(148,163,184,0.3); padding:14px 16px; background:rgba(15,23,42,0.85);">
+            <h2 style="font-size:15px; margin-bottom:6px;">Ping Host</h2>
+            <p style="font-size:13px; color:#9ca3af; margin-bottom:10px;">
+                ICMP reachability test. This tool is wired to the vulnerable backend endpoint.
+            </p>
+            <form method="GET" action="/ping" style="display:flex; gap:8px;">
+                <input type="text" name="host" placeholder="e.g. 8.8.8.8"
+                       style="flex:1; padding:8px 10px; border-radius:8px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.9); color:#e5e7eb; font-size:13px;">
+                <button type="submit"
+                        style="padding:8px 12px; border-radius:8px; border:none; background:#22c55e; color:#022c22; font-size:13px; font-weight:600; cursor:pointer;">
+                    Run
+                </button>
+            </form>
+        </section>
+
+        <section style="border-radius:10px; border:1px solid rgba(148,163,184,0.2); padding:14px 16px; background:rgba(15,23,42,0.7);">
+            <h2 style="font-size:15px; margin-bottom:6px;">DNS Lookup</h2>
+            <p style="font-size:13px; color:#9ca3af;">
+                Placeholder for DNS resolution tests (non-interactive in this lab).
+            </p>
+        </section>
+
+        <section style="border-radius:10px; border:1px solid rgba(148,163,184,0.2); padding:14px 16px; background:rgba(15,23,42,0.7);">
+            <h2 style="font-size:15px; margin-bottom:6px;">Traceroute</h2>
+            <p style="font-size:13px; color:#9ca3af;">
+                Visualizes hops to a remote host (description only for this lab).
+            </p>
+        </section>
+
+        <section style="border-radius:10px; border:1px solid rgba(148,163,184,0.2); padding:14px 16px; background:rgba(15,23,42,0.7);">
+            <h2 style="font-size:15px; margin-bottom:6px;">Subnet Scanner</h2>
+            <p style="font-size:13px; color:#9ca3af;">
+                Internal asset discovery utility (UI stub only, no backend call).
+            </p>
+        </section>
+    </div>
+</div>
+{% endblock %}
+

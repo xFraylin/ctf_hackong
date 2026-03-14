@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>IntraCorp Employee Portal</h1>
+    <p style="margin-bottom: 16px; color:#9ca3af;">
+        Secure access for IntraCorp employees to internal systems and resources.
+    </p>
+
+    {% if mensaje_error %}
+    <div style="margin-bottom:16px; padding:10px 12px; border-radius:8px; border:1px solid #f97373; background:rgba(248,113,113,0.08); color:#fecaca; font-size:14px;">
+        {{ mensaje_error }}
+    </div>
+    {% endif %}
+
+    <div style="display:grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap:24px; align-items:flex-start; margin-top:8px;">
+        <form method="POST" action="/login" style="display:flex; flex-direction:column; gap:12px;">
+            <div>
+                <label for="usuario" style="display:block; font-size:13px; margin-bottom:4px; color:#e5e7eb;">Username</label>
+                <input id="usuario" name="usuario" type="text" required
+                       style="width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.9); color:#e5e7eb; font-size:14px;">
+            </div>
+            <div>
+                <label for="password" style="display:block; font-size:13px; margin-bottom:4px; color:#e5e7eb;">Password</label>
+                <input id="password" name="password" type="password" required
+                       style="width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.9); color:#e5e7eb; font-size:14px;">
+            </div>
+            <button type="submit"
+                    style="margin-top:4px; padding:10px 14px; border-radius:8px; border:none; background:linear-gradient(135deg,#1d4ed8,#38bdf8); color:#e5e7eb; font-weight:600; font-size:14px; cursor:pointer;">
+                Sign in
+            </button>
+            <p style="font-size:12px; color:#9ca3af; margin-top:4px;">
+                Hint for CTF: test SQL injection against <code>POST /login</code>.
+            </p>
+        </form>
+
+        <div style="display:grid; gap:16px;">
+            <section>
+                <h2 style="font-size:16px; margin-bottom:6px;">Company News</h2>
+                <ul style="list-style:none; font-size:13px; color:#9ca3af;">
+                    <li>• Q2 security audit in progress across all internal systems.</li>
+                    <li>• New VPN gateway rollout scheduled for next week.</li>
+                    <li>• Mandatory security awareness training for all employees.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 style="font-size:16px; margin-bottom:6px;">Employee Directory</h2>
+                <ul style="list-style:none; font-size:13px; color:#9ca3af;">
+                    <li><strong>IT Operations:</strong> ops@intracorp.local</li>
+                    <li><strong>Security Team:</strong> security@intracorp.local</li>
+                    <li><strong>HR Support:</strong> hr@intracorp.local</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

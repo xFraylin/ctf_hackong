@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>IntraCorp Billing Dashboard</h1>
+    <p style="margin-bottom:16px; color:#9ca3af;">
+        Overview of key customer invoices and billing operations.
+    </p>
+
+    <h2 style="font-size:15px; margin-bottom:8px;">Invoices</h2>
+    <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:18px;">
+        <thead>
+            <tr style="color:#9ca3af; text-align:left;">
+                <th style="padding:6px 0;">Client</th>
+                <th style="padding:6px 0;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in clientes %}
+            <tr>
+                <td style="padding:6px 0; border-top:1px solid rgba(148,163,184,0.3);">{{ c }}</td>
+                <td style="padding:6px 0; border-top:1px solid rgba(148,163,184,0.3);">
+                    <span style="padding:2px 8px; border-radius:999px; background:rgba(34,197,94,0.15); color:#4ade80; font-size:12px;">
+                        Open
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 style="font-size:15px; margin-bottom:8px;">Generate Invoice</h2>
+    <form method="POST" action="#" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input type="text" name="client" placeholder="Client name"
+               style="flex:1; min-width:180px; padding:8px 10px; border-radius:8px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.9); color:#e5e7eb; font-size:13px;">
+        <input type="number" name="amount" placeholder="Amount"
+               style="width:140px; padding:8px 10px; border-radius:8px; border:1px solid rgba(148,163,184,0.6); background:rgba(15,23,42,0.9); color:#e5e7eb; font-size:13px;">
+        <button type="submit"
+                style="padding:8px 12px; border-radius:8px; border:none; background:#4f46e5; color:#e5e7eb; font-size:13px; font-weight:600; cursor:pointer;">
+            Generate Invoice
+        </button>
+    </form>
+</div>
+{% endblock %}
+
